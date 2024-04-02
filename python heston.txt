@@ -1,0 +1,84 @@
+import numpy as np
+
+class HestonModel:
+    def __init__(self, S0, V0, kappa, theta, sigma, rho, r):
+        self.S0 = S0              # Initial stock price
+        self.V0 = V0              # Initial volatility
+        self.kappa = kappa        # Mean reversion rate of volatility
+        self.theta = theta        # Long-term average volatility
+        self.sigma = sigma        # Volatility of volatility
+        self.rho = rho            # Correlation between stock price and volatility
+        self.r = r                # Risk-free interest rate
+
+    def simulate_paths(self, T, dt, n_paths, n_steps):
+        np.random.seed(42)
+        sqrt_dt = np.sqrt(dt)
+
+        # Initialize arrays to store paths
+        stock_paths = np.zeros((n_paths, n_steps + 1))
+        vol_paths = np.zeros((n_paths, n_steps + 1))
+
+        for i in range(n_paths):
+            # Initialize variables for each path
+            stock_price = self.S0
+            volatility = self.V0
+
+            for j in range(n_steps):
+                # Generate correlated random variables
+                dW1 = np.random.normal(0, sqrt_dt)
+                dW2 = self.rho * dW1 + np.sqrt(1 - self.rho ** 2) * np.random.normal(0, sqrt_dt)
+                
+                # Euler discretization scheme
+                stock_price += self.r * stock_price * dt + np.sqrt(volatility) * stock_price * dW1
+                volatility += self.kappa * (self.theta - volatility) * dt + self.sigma * np.sqrt(volatility) * dW2
+
+                # Ensure volatility stays non-negative
+                volatility = max(volatility, 0)
+
+                # Store values
+                stock_paths[i, j + 1] = stock_price
+                vol_paths[i, j + 1] = volatility
+
+        return stock_paths, vol_paths
+
+    def european_call_price(self, T, K, dt, n_paths, n_steps):
+        stock_paths, _ = self.simulate_paths(T, dt, n_paths, n_steps)
+        discount_factor = np.exp(-self.r * T)
+
+        # Compute option payoff
+        option_payoff = np.maximum(stock_paths[:, -1] - K, 0)
+
+        # Compute option price
+        option_price = discount_factor * np.mean(option_payoff)
+
+        return option_price
+
+# Example usage:
+if __name__ == "__main__":
+    # Model parameters
+    S0 = 100      # Initial stock price
+    V0 = 0.04     # Initial volatility
+    kappa = 2.0   # Mean reversion rate of volatility
+    theta = 0.04  # Long-term average volatility
+    sigma = 0.3   # Volatility of volatility
+    rho = -0.5    # Correlation between stock price and volatility
+    r = 0.05      # Risk-free interest rate
+
+    # Option parameters
+    T = 1         # Time to maturity
+    K = 100       # Strike price
+    dt = 1/252    # Time step size
+    n_paths = 10000   # Number of Monte Carlo paths
+    n_steps = int(T / dt)
+
+    # heston_model = HestonModel(S0, V0, kappa, theta, sigma, rho, r)
+    # call_price = heston_model.european_call_price(T, K, dt, n_paths, n_steps)
+    # print("European Call Price:", call_price) 
+    # print(np.random.normal(0, np.sqrt(1/252)))
+
+    np.random.seed(42)
+    stock_paths = np.zeros((10, int(2)))
+    vol_paths = np.zeros((10000, int(1/252)))
+    print(np.random.normal(0, np.sqrt(dt)))
+    print(np.random.normal(0, np.sqrt(dt)))
+    print(np.random.normal(0, np.sqrt(dt)))
