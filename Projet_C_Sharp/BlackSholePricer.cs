@@ -8,9 +8,9 @@
 // {
 //     static double PriceOptionKI(double S, double K, double B, double r, double div, double T, double vol, double n, bool isCall)
 //     {
-//         int simulations = (int)n;
-//         // var z = Normal.Samples(simulations).ToArray();
-//         // var ST = z.Select(zValue => S * Math.Exp(((r - div) - 0.5 * vol * vol) * T + vol * Math.Sqrt(T) * zValue));
+//         double[] simulations = n;
+//         var z = Normal.Samples(simulations).ToArray();
+//         var ST = z.Select(zValue => S * Math.Exp(((r - div) - 0.5 * vol * vol) * T + vol * Math.Sqrt(T) * zValue));
 
 //         double[] payoff;
 //         if (isCall)
