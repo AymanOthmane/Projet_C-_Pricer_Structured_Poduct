@@ -6,27 +6,35 @@ using Accord.Statistics.Distributions.Univariate;
 
 namespace ToolBox
 {
-    public class Generate_Paths{
+    public static class Generate_Paths{
 
-        public double[][] StockPaths(double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist){
+        public static double[][] StockPaths(double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist){
             NormalDistribution obj_rnd = new NormalDistribution(mean: mean_dist, stdDev: stdev_dist);
             double div=0.0;
             double[][] ST = new double[nb_Simulations][];
             double[] Z = new double[nb_steps - 1];
-            double[] Path = new double[nb_steps];
-            Path[0] = S0;
+            // double[] Path = new double[nb_steps];
+            // Path[0] = S0;
             for (int i = 0; i<nb_Simulations;i++)
             {
+                double[] Path = new double[nb_steps];
+                ST[i] = new double[nb_steps];
                 Path[0] = S0;
                 Z = obj_rnd.Generate(nb_steps);
 
-                for (int j = 1; j<nb_steps;i++){
+                for (int j = 1; j<nb_steps;j++){
                     Path[j] = Path[j-1] * Math.Exp(((r-div) - 0.5 * vol * vol) * dt + vol * Math.Sqrt(dt) * Z[j]);
                 }
                 ST[i]=Path;
-                Path.Clear();
+                
             }
-
+            // for (int i = 0; i < 10; i++)
+            // {
+            //     for (int j = 0; j < 10; j++)
+            //     {
+            //         Console.WriteLine(ST[i][j]);
+            //     }
+            // }
             return ST;
         }
     }
