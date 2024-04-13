@@ -6,7 +6,7 @@ namespace DataRetrieval
 {
     public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             string filePath = @"C:\Users\carri\OneDrive - Université Paris-Dauphine\cours dauphine\M2\S1\C#\Connection Excel\Interface Excel.xlsx";
 
