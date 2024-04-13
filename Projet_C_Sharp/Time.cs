@@ -54,42 +54,42 @@ public class DateCalculator
     {
         double dt;
 
-        if (DateTime.IsLeapYear(date.Year))
+        if (DateTime.IsLeapYear(date.Year) && IsBusinessDay(DateTime.Parse(date.Year + "-02-29")))
         {
-            dt = 1.0 / 252.0;
+            dt = 1.0 / 253.0;
         }
         else
         {
-            dt = 1.0 / 253.0;
+            dt = 1.0 / 252.0;
         }
 
         return dt;
     }
 
-    public static void Main(string[] args)
-    {
-        DateTime startDate = DateTime.Parse("2018-10-08");
-        int years = 6;
+    // public static void Main(string[] args)
+    // {
+    //     DateTime startDate = DateTime.Parse("2018-10-08");
+    //     int years = 6;
 
-        DateTime endDate = GetEndDate(startDate, years);
+    //     DateTime endDate = GetEndDate(startDate, years);
 
-        DateTime nextBusinessDay = GetNextBusinessDay(endDate);
+    //     DateTime nextBusinessDay = GetNextBusinessDay(endDate);
 
-        bool isBusinessDay = IsBusinessDay(endDate);
+    //     bool isBusinessDay = IsBusinessDay(endDate);
 
-        int businessDays = GetNumberOfBusinessDays(startDate, nextBusinessDay);
+    //     int businessDays = GetNumberOfBusinessDays(startDate, nextBusinessDay);
 
-        var businessYears = GetNumberOfBusinessYears(businessDays);
+    //     var businessYears = GetNumberOfBusinessYears(businessDays);
 
-        double dt = TimeVariation(endDate);
+    //     double dt = TimeVariation(endDate);
 
 
-        Console.WriteLine($"Date de début: {startDate.ToString("dd/MM/yyyy")}");
-        Console.WriteLine($"Jour ouvrable: {isBusinessDay}");
-        Console.WriteLine($"Prochain jour ouvrable: {nextBusinessDay.ToString("dd/MM/yyyy")}");
-        Console.WriteLine(endDate - startDate);
-        Console.WriteLine($"Nombres de jours ouvrables: {businessDays}");
-        Console.WriteLine($"Nombres d'années ouvrables: {businessYears}");
-        Console.WriteLine($"dt: {string.Format("{0:0.00000000}", dt)}");
-    }
+    //     Console.WriteLine($"Date de début: {startDate.ToString("dd/MM/yyyy")}");
+    //     Console.WriteLine($"Jour ouvrable: {isBusinessDay}");
+    //     Console.WriteLine($"Prochain jour ouvrable: {nextBusinessDay.ToString("dd/MM/yyyy")}");
+    //     Console.WriteLine(endDate - startDate);
+    //     Console.WriteLine($"Nombres de jours ouvrables: {businessDays}");
+    //     Console.WriteLine($"Nombres d'années ouvrables: {businessYears}");
+    //     Console.WriteLine($"dt: {string.Format("{0:0.00000000}", dt)}");
+    // }
 }

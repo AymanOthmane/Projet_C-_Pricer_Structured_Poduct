@@ -5,6 +5,7 @@ using MathNet.Numerics.Distributions;
 using Accord.Statistics.Distributions.Univariate;
 using Accord.Statistics;
 using ToolBox;
+
 class HestonModel
 {
     // Heston model parameters
@@ -36,16 +37,16 @@ class HestonModel
         assetPrices[0] = S0;
         variances[0] = v0;
 
-        Normal rnd1 = new Normal(0, Math.Sqrt(1.0/252));
+        NormalDistribution obj_rnd = new NormalDistribution(0, Math.Sqrt(1.0/252));
         Normal rnd2 = new Normal(0, Math.Sqrt(1.0/252));
+        double[] Z1 = obj_rnd.Generate(steps);
+        double[] Z2 = obj_rnd.Generate(steps);
 
         for (int i = 1; i <= steps; i++)
         {
-            double Z1 = rnd1.Sample();
-            double Z2 = rnd2.Sample();
-
-            double dW1 =  Z1;
-            double dW2 = rho * Z1 + Math.Sqrt(1 - rho * rho) * Z2;
+ 
+            double dW1 =  Z1[i-1];
+            double dW2 = rho * Z1[i-1] + Math.Sqrt(1 - rho * rho) * Z2[i-1];
 
             double volIncrement = kappa * (theta - variances[i - 1]) * dt +
                                    sigma * Math.Sqrt(variances[i - 1]) * dW2;
@@ -54,7 +55,6 @@ class HestonModel
 
             variances[i] = Math.Max(variances[i - 1] + volIncrement, 0.0);
             assetPrices[i] = Math.Max(assetPrices[i - 1] + assetIncrement, 0.0);
-            // Console.WriteLine(assetPrices[i] + " " + variances[i]);
 
         }
 
@@ -106,7 +106,7 @@ class MonteCarloPricer
 
 class Program
 {
-    static void Main(string[] args)
+    static async void Main(string[] args)
     {
         // Heston model parameters
         double kappa = 1.0;
@@ -133,18 +133,10 @@ class Program
 
         Console.WriteLine("European Call Option Price: " + callPrice);
         Console.WriteLine("European Put Option Price: " + putPrice);
-        var normal = new NormalDistribution(mean: 0, stdDev: Math.Sqrt(1.0/252));
-
-        double[][] ST = Generate_Paths.StockPaths(S0, r, v0, 1.0, 10, 10, 0, 1.0);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist){
         
-        for (int i = 0; i < 10; i++)
-        {
-            for (int j = 0; j < 10; j++)
-            {
-                Console.WriteLine(ST[i][j]);
-            }
-        }
-
+        // Yahoo.Finance.EquityData yahoo= new Yahoo.Finance.EquityData;
+        
+        double[][] ST = Generate_Paths.StockPaths(S0, r, v0, 1.0, 10, 10, 0, 1.0);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist){
     }
 }
 

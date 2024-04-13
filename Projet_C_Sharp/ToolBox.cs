@@ -28,19 +28,74 @@ namespace ToolBox
                 ST[i]=Path;
                 
             }
-            // for (int i = 0; i < 10; i++)
-            // {
-            //     for (int j = 0; j < 10; j++)
-            //     {
-            //         Console.WriteLine(ST[i][j]);
-            //     }
-            // }
+
             return ST;
         }
     }
 
+    public class DateCalculator
+    {
+        public static DateTime GetEndDate(DateTime startDate, int years)
+        {
+            return startDate.AddYears(years);
+        }
 
+        public static bool IsBusinessDay(DateTime date)
+        {
+            return !date.DayOfWeek.Equals(DayOfWeek.Saturday) && !date.DayOfWeek.Equals(DayOfWeek.Sunday);
+        }
+
+        public static DateTime GetNextBusinessDay(DateTime date)
+        {
+            while (!IsBusinessDay(date))
+            {
+                date = date.AddDays(1);
+            }
+
+            return date;
+        }
+
+        public static int GetNumberOfBusinessDays(DateTime startDate, DateTime endDate)
+        {
+            int count = 0;
+
+            while (startDate <= endDate)
+            {
+                if (IsBusinessDay(startDate))
+                {
+                    count++;
+                }
+
+                startDate = startDate.AddDays(1);
+            }
+
+            return count;
+        }
+
+        public static int GetNumberOfBusinessYears(int businessDays)
+        {
+            return businessDays / 365;
+        }
+
+        public static double TimeVariation(DateTime date)
+        {
+            double dt;
+
+            if (DateTime.IsLeapYear(date.Year) && IsBusinessDay(DateTime.Parse(date.Year + "-02-29")))
+            {
+                dt = 1.0 / 253.0;
+            }
+            else
+            {
+                dt = 1.0 / 252.0;
+            }
+
+            return dt;
+        }
+
+    }
 }
+
 // class NormalDistributionGenerator
 // {
 //     private Random random;
