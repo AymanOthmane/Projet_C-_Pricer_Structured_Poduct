@@ -47,7 +47,7 @@ public class ProgramTests
     {
         var data = DataRetrieval.Program.GetDataFromExcel(filePath);
         DateTime maturity = Convert.ToDateTime(data[3]);
-        DateTime strikeDate = Convert.ToDateTime(data[4]);
+        DateTime strikeDate = Convert.ToDateTime(data[6]);
         Assert.That(strikeDate, Is.LessThan(maturity), "La date de strike doit être antérieure à la maturité.");
     }
 }

@@ -36,7 +36,8 @@ namespace DataRetrieval
                     string f = worksheet.Cells[6, 3].GetValue<string>();
                     DateTime mat = worksheet.Cells[7, 3].GetValue<DateTime>();
                     bool autocall = worksheet.Cells[8, 3].GetValue<bool>();
-                    DateTime strike_date = worksheet.Cells[9, 3].GetValue<DateTime>();
+                    double coupon = worksheet.Cells[9, 3].GetValue<double>();
+                    DateTime strike_date = worksheet.Cells[10, 3].GetValue<DateTime>();
 
                     dataList.Add(N);
                     dataList.Add(f);
@@ -51,7 +52,7 @@ namespace DataRetrieval
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+                Console.WriteLine("Une erreur s'est produite : "+ " Veillez à ce que le fichier excel soit bien fermé." + ex.Message);
             }
             finally
             {
