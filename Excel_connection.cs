@@ -1,34 +1,67 @@
 ﻿using OfficeOpenXml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
+using System.Collections.Generic;
 
-class Program
+namespace DataRetrieval
 {
-    static void Main()
+    public class Program
     {
-        string filePath = @"C:\Users\carri\OneDrive - Université Paris-Dauphine\cours dauphine\M2\S1\C#\Connection Excel\Interface Excel.xlsx";
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-        
-        using (var package = new ExcelPackage(new System.IO.FileInfo(filePath)))
+        static void Main(string[] args)
         {
-            int numberOfWorksheets = package.Workbook.Worksheets.Count;
-            Console.WriteLine(numberOfWorksheets);
-            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+            string filePath = @"C:\Users\carri\OneDrive - Université Paris-Dauphine\cours dauphine\M2\S1\C#\Connection Excel\Interface Excel.xlsx";
 
-            if (worksheet != null)
+            var data = GetDataFromExcel(filePath);
+
+            foreach (var item in data)
             {
-                double N = worksheet.Cells[5,3].GetValue<double>();
-                string f = worksheet.Cells[6,3].GetValue<string>();
-                DateTime mat = worksheet.Cells[7,3].GetValue<DateTime>();
-                mat.ToString("d");
-                bool autocall = worksheet.Cells[8,3].GetValue<bool>();
-                DateTime strike_date = worksheet.Cells[9,3].GetValue<DateTime>();
-                strike_date.ToString("d");
+                Console.WriteLine(item);
             }
-            
-            else
+        }
+
+        public static List<object> GetDataFromExcel(string filePath)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            List<object> dataList = new List<object>();
+            ExcelPackage package = null;
+
+            try
             {
-                Console.WriteLine("La feuille de calcul 'Interface' n'a pas été trouvée.");
+                package = new ExcelPackage(new System.IO.FileInfo(filePath));
+                ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+
+                if (worksheet != null)
+                {
+                    double N = worksheet.Cells[5, 3].GetValue<double>();
+                    string f = worksheet.Cells[6, 3].GetValue<string>();
+                    DateTime mat = worksheet.Cells[7, 3].GetValue<DateTime>();
+                    bool autocall = worksheet.Cells[8, 3].GetValue<bool>();
+                    DateTime strike_date = worksheet.Cells[9, 3].GetValue<DateTime>();
+
+                    dataList.Add(N);
+                    dataList.Add(f);
+                    dataList.Add(mat);
+                    dataList.Add(autocall);
+                    dataList.Add(strike_date);
+                }
+                else
+                {
+                    Console.WriteLine("La feuille de calcul 'Interface' n'a pas été trouvée.");
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Une erreur s'est produite : " + ex.Message);
+            }
+            finally
+            {
+                if (package != null)
+                {
+                    package.Dispose();
+                }
+            }
+
+            return dataList;
         }
     }
 }
