@@ -101,67 +101,6 @@ namespace Options
             double price = payoff.Average();
             return price;
         }
-
-        public static double Price_Option_KI_WO_BO(double S_US, double r_US, double vol_US, double div_US, double S_EU, double r_EU, double vol_EU, double div_EU, double T, int n, double K, double B, bool isBO, bool isCall)
-        {
-            // Simulate the stock price paths
-            // double[] z_US = Normal.Samples(n);
-            // double[] z_EU = Normal.Samples(n);
-            double[] ST_US = new double[n];
-            double[] ST_EU = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                ST_US[i] = S_US * Math.Exp(((r_US - div_US) - 0.5 * vol_US * vol_US) * T + vol_US * Math.Sqrt(T) * z_US[i]);
-                ST_EU[i] = S_EU * Math.Exp(((r_EU - div_EU) - 0.5 * vol_EU * vol_EU) * T + vol_EU * Math.Sqrt(T) * z_EU[i]);
-            }
-
-            double[] ST = new double[n];
-            if (isBO)
-            {
-                for (int i = 0; i < n; i++)
-                {
-                    ST[i] = Math.Max(ST_EU[i], ST_US[i]);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < n; i++)
-                {
-                    ST[i] = Math.Min(ST_EU[i], ST_US[i]);
-                }
-            }
-
-            double[] r = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                r[i] = (ST[i] == ST_EU[i]) ? r_EU : r_US;
-            }
-
-            // Calculate the option payoff
-            double[] payoff = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                if (isCall)
-                {
-                    payoff[i] = Math.Max(ST[i] - K, 0);
-                }
-                else
-                {
-                    payoff[i] = Math.Max(K - ST[i], 0);
-                }
-
-                if (payoff[i] < B)
-                {
-                    payoff[i] = 0;
-                }
-
-                payoff[i] = Math.Exp(-r[i] * T) * payoff[i];
-            }
-
-            // Calculate the option price
-            double price = payoff.Average();
-            return price;
-        }
     }
 
     
