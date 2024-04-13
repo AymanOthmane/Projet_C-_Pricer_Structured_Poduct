@@ -8,9 +8,9 @@ namespace ToolBox
 {
     public static class Generate_Paths{
 
-        public static double[][] StockPaths(double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist){
+        public static double[][] StockPaths(double S0, double r, double vol, double dt, int nb_steps, double mean_dist, double stdev_dist){
             NormalDistribution obj_rnd = new NormalDistribution(mean: mean_dist, stdDev: stdev_dist);
-            double div=0.0;
+            int nb_Simulations = 100000;
             double[][] ST = new double[nb_Simulations][];
             double[] Z = new double[nb_steps - 1];
             // double[] Path = new double[nb_steps];
@@ -23,7 +23,7 @@ namespace ToolBox
                 Z = obj_rnd.Generate(nb_steps);
 
                 for (int j = 1; j<nb_steps;j++){
-                    Path[j] = Path[j-1] * Math.Exp(((r-div) - 0.5 * vol * vol) * dt + vol * Math.Sqrt(dt) * Z[j]);
+                    Path[j] = Path[j-1] * Math.Exp(((r) - 0.5 * vol * vol) * dt + vol * Math.Sqrt(dt) * Z[j]);
                 }
                 ST[i]=Path;
                 

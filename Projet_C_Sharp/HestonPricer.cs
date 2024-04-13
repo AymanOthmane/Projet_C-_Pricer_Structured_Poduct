@@ -104,39 +104,39 @@ class MonteCarloPricer
     }
 }
 
-class Program
-{
-    static async void Main(string[] args)
-    {
-        // Heston model parameters
-        double kappa = 1.0;
-        double theta = 0.16;
-        double sigma = 0.0625;
-        double rho = -0.8;
-        double v0 = 0.16;
-        double r = 0.00;
-        double S0 = 100.0;
+// class Program
+// {
+//     static async void Main(string[] args)
+//     {
+//         // Heston model parameters
+//         double kappa = 1.0;
+//         double theta = 0.16;
+//         double sigma = 0.0625;
+//         double rho = -0.8;
+//         double v0 = 0.16;
+//         double r = 0.00;
+//         double S0 = 100.0;
 
-        // Option parameters
-        double T = 1.0;      // Time to expiration
-        double strike = 100; // Option strike price
+//         // Option parameters
+//         double T = 1.0;      // Time to expiration
+//         double strike = 100; // Option strike price
 
-        // Simulation parameters
-        int steps = 252;   // Number of time steps
-        int paths = 1000;  // Number of simulation paths
+//         // Simulation parameters
+//         int steps = 252;   // Number of time steps
+//         int paths = 1000;  // Number of simulation paths
 
-        HestonModel model = new HestonModel(kappa, theta, sigma, rho, v0, r, S0);
-        MonteCarloPricer pricer = new MonteCarloPricer(model);
+//         HestonModel model = new HestonModel(kappa, theta, sigma, rho, v0, r, S0);
+//         MonteCarloPricer pricer = new MonteCarloPricer(model);
 
-        double callPrice = pricer.PriceEuropeanCall(T, steps, paths, strike);
-        double putPrice = pricer.PriceEuropeanPut(T, steps, paths, strike);
+//         double callPrice = pricer.PriceEuropeanCall(T, steps, paths, strike);
+//         double putPrice = pricer.PriceEuropeanPut(T, steps, paths, strike);
 
-        Console.WriteLine("European Call Option Price: " + callPrice);
-        Console.WriteLine("European Put Option Price: " + putPrice);
+//         Console.WriteLine("European Call Option Price: " + callPrice);
+//         Console.WriteLine("European Put Option Price: " + putPrice);
         
-        // Yahoo.Finance.EquityData yahoo= new Yahoo.Finance.EquityData;
+//         // Yahoo.Finance.EquityData yahoo= new Yahoo.Finance.EquityData;
         
-        double[][] ST = Generate_Paths.StockPaths(S0, r, v0, 1.0, 10, 10, 0, 1.0);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist){
-    }
-}
+//         double[][] ST = Generate_Paths.StockPaths(S0, r, v0, 1.0, 10, 10, 0, 1.0);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist){
+//     }
+// }
 
