@@ -14,6 +14,7 @@ namespace ToolBox
             int nb_Simulations = 10000;
             double[][] ST = new double[nb_Simulations][];
             double[] Z = new double[nb_steps - 1];
+            
             for (int i = 0; i<nb_Simulations;i++)
             {
                 double[] Path = new double[nb_steps];
@@ -23,6 +24,7 @@ namespace ToolBox
 
                 for (int j = 1; j<nb_steps;j++){
                     Path[j] = Path[j-1] * Math.Exp(((r) - 0.5 * vol * vol) * dt + vol * Math.Sqrt(dt) * Z[j]);
+                    
                 }
                 ST[i]=Path;
                 

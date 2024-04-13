@@ -38,17 +38,18 @@ namespace Autocall{
         public double Pricing()
         {
             int steps = Convert.ToInt32(Convert.ToDouble(T/dt));
-            double[][] Paths = Generate_Paths.StockPaths(S, r, vol, dt, Convert.ToInt32(Convert.ToDouble(T/dt)), 0, dt);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist)
+            
+            double[][] Paths = Generate_Paths.StockPaths(100, r, vol, dt, Convert.ToInt32(T/dt), 0, dt);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist)
             Paths = Paths.Transpose();
             List<int> index = DateCalculator.ReturnDateFromIndex(startDate, frequency, T);
             double[][] Observations = new double[index.Count][];
             for (int i = 0; i < index.Count;i++){
                 Observations[i] = Paths[index[i]];
+              
             }
-
+          
             double[] Payoff = new double[10000];
             double Price = 0;
-            
             
             double[] Observation = new double[10000];
 
@@ -68,26 +69,30 @@ namespace Autocall{
                     };
                     
                 }
+                // Console.WriteLine(Payoff.Average());
                 Price = Price + Math.Exp(-r) * Payoff.Average();
-
+                
             }
-            int k = Convert.ToInt32(T/dt)-1;
-            Observation= Observations[Observation.Length-1];
-            for (int j = 0; j <= Observation.Length; j++)
+            Console.WriteLine("Price: " + Price);
+          
+            Observation= Observations[Observations.Length-1];
+            for (int j = 0; j < Observation.Length; j++)
             {
+                // Console.WriteLine(Observation[j]);
                 if (Observation[j]<K && Observation[j]>barrier)
                 {
-                    Payoff[j]=1;
+                    Payoff[j] = 1;
                 }
                 else if (Observation[j]>K)
                 {
-                    Payoff[j]=1+coupon;
+                    Payoff[j] = 1+coupon;
                 }
                 else{
                     Payoff[j] = Observation[j]/K;
                 };
                 
             }
+
             Price = Price + Math.Exp(-r) * Payoff.Average();
             return Price;
         }

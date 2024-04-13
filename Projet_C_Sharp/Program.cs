@@ -20,11 +20,9 @@ namespace Program{
             if (Convert.ToString(data[3]) == "ATHENA")
             {
                 Athena product = new Athena(Convert.ToDateTime(data[7]),Convert.ToDouble(data[5]),Convert.ToDouble(data[5]),0.02,Convert.ToInt32(data[2]),Convert.ToDouble(data[6]),Convert.ToDouble(data[4]),0.00396825396825396825396825396825,Convert.ToBoolean(data[1]));
-                Console.WriteLine(product.Pricing());
+                double prix = product.Pricing();
             }
-            else{
-                Console.WriteLine("Pas rentré dans le if");
-            }
+            
         }
     }
 }
