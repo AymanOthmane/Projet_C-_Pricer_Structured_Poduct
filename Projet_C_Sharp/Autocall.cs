@@ -67,7 +67,7 @@ namespace Autocall{
             Observation= Observations[Observation.Length-1];
             for (int j = 0; j <= Observation.Length; j++)
             {
-                if (Observation[j]<K && Observation[j]/K>barrier)
+                if (Observation[j]<K && Observation[j]>barrier)
                 {
                     Payoff[j]=1;
                 }
@@ -100,7 +100,7 @@ namespace Autocall{
     private double dt; //Time step
     private bool frequency;
     
-    public Phoenix(double S, double K, double r, double div, double T, double vol, double coupon, double dt, bool frequency)
+    public Phoenix(double S, double K, double PDI_barrier, double Cpn_barrier, double r, double div, double T, double vol, double coupon, double dt, bool frequency)
     {
         this.S = S;
         this.K = K;
@@ -131,7 +131,11 @@ namespace Autocall{
                 Observation= Observations[i];
                 for (int j = 0; j <= Observation.Length; j++)
                 {
-                    if (Observation[j]<K)
+                    if (Observation[j]<K && Observation[j]>Cpn_barrier)
+                    {
+                        Payoff[j]=coupon;
+                    }
+                    else if (Observation[j]<Cpn_barrier)
                     {
                         Payoff[j]=0;
                     }
@@ -143,15 +147,15 @@ namespace Autocall{
                 Price = Price + Math.Exp(-r) * Payoff.Average();
 
             }
-            int k = Convert.ToInt32(T/dt)-1;
+           
             Observation= Observations[Observation.Length-1];
             for (int j = 0; j <= Observation.Length; j++)
             {
-                if (Observation[j]<K && Observation[j]/K>barrier)
+                if (Observation[j]< Cpn_barrier && Observation[j]>PDI_barrier)
                 {
                     Payoff[j]=1;
                 }
-                else if (Observation[j]>K)
+                else if (Observation[j]>Cpn_barrier)
                 {
                     Payoff[j]=1+coupon;
                 }
