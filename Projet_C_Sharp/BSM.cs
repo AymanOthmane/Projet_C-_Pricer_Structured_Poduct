@@ -45,10 +45,10 @@ namespace Options
             }
         }
 
-        static void Main(string[] args){
+        // static void Main(string[] args){
 
-            Console.WriteLine(Price_BS_Option(100,100,0.05,0,1,20,true));
-        }
+        //     Console.WriteLine(Price_BS_Option(100,100,0.05,0,1,20,true));
+        // }
     }
     public class Knock_In_Option
     {
@@ -69,38 +69,38 @@ namespace Options
         private static double div_EU = 0.0;
         private static double vol_EU = 0.15;  // Volatility
 
-        public static double Price_Option_KI(double S, double K, double B, double r, double div, double T, double vol, int n, bool isCall)
-        {
-            // Simulate the stock price paths
-            var obj_rnd = new NormalDistribution(mean: 0, stdDev: Math.Sqrt(1.0/252));
-            double[] z = obj_rnd.Generate(n);
-            double[][] ST = new double[n][];
+        // public static double Price_Option_KI(double S, double K, double B, double r, double div, double T, double vol, int n, bool isCall)
+        // {
+        //     // Simulate the stock price paths
+        //     var obj_rnd = new NormalDistribution(mean: 0, stdDev: Math.Sqrt(1.0/252));
+        //     double[] z = obj_rnd.Generate(n);
+        //     double[][] ST = new double[n][];
 
-            // Calculate the option payoff
-            double[] payoff = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                if (isCall)
-                {
-                    payoff[i] = Math.Max(ST[i][] - K, 0);
-                }
-                else
-                {
-                    payoff[i] = Math.Max(K - ST[i][], 0);
-                }
+        //     // Calculate the option payoff
+        //     double[] payoff = new double[n];
+        //     for (int i = 0; i < n; i++)
+        //     {
+        //         if (isCall)
+        //         {
+        //             payoff[i] = Math.Max(ST[i][] - K, 0);
+        //         }
+        //         else
+        //         {
+        //             payoff[i] = Math.Max(K - ST[i][], 0);
+        //         }
 
-                if (payoff[i] < B)
-                {
-                    payoff[i] = 0;
-                }
+        //         if (payoff[i] < B)
+        //         {
+        //             payoff[i] = 0;
+        //         }
 
-                payoff[i] = Math.Exp(-r * T) * payoff[i];
-            }
+        //         payoff[i] = Math.Exp(-r * T) * payoff[i];
+        //     }
 
-            // Calculate the option price
-            double price = payoff.Average();
-            return price;
-        }
+        //     // Calculate the option price
+        //     double price = payoff.Average();
+        //     return price;
+        // }
     }
 
     

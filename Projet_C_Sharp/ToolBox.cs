@@ -11,7 +11,7 @@ namespace ToolBox
 
         public static double[][] StockPaths(double S0, double r, double vol, double dt, int nb_steps, double mean_dist, double stdev_dist){
             NormalDistribution obj_rnd = new NormalDistribution(mean: mean_dist, stdDev: stdev_dist);
-            int nb_Simulations = 100000;
+            int nb_Simulations = 10000;
             double[][] ST = new double[nb_Simulations][];
             double[] Z = new double[nb_steps - 1];
             for (int i = 0; i<nb_Simulations;i++)
@@ -152,9 +152,6 @@ namespace ToolBox
             }
             return indexList;
         }
-
-
-
     }
 
     public class Data{
@@ -167,23 +164,34 @@ namespace ToolBox
 
                 try
                 {
-                    package = new ExcelPackage(new System.IO.FileInfo(filePath));
+                    package = new ExcelPackage(new FileInfo(filePath));
                     ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
                     if (worksheet != null)
                     {
                         double N = worksheet.Cells[5, 3].GetValue<double>();
                         string f = worksheet.Cells[6, 3].GetValue<string>();
-                        DateTime mat = worksheet.Cells[7, 3].GetValue<DateTime>();
-                        bool autocall = worksheet.Cells[8, 3].GetValue<bool>();
+                        double mat = worksheet.Cells[7, 3].GetValue<double>();
+                        string product = worksheet.Cells[8, 3].GetValue<string>();
                         double coupon = worksheet.Cells[9, 3].GetValue<double>();
+                        double price = worksheet.Cells[7, 9].GetValue<double>();
+                        double vol = worksheet.Cells[7, 10].GetValue<double>();
                         DateTime strike_date = worksheet.Cells[10, 3].GetValue<DateTime>();
 
                         dataList.Add(N);
-                        dataList.Add(f);
+                        if (f=="Annuelle ")
+                        {
+                            dataList.Add(true);
+                        }
+                        else 
+                        {
+                            dataList.Add(false);
+                        }
                         dataList.Add(mat);
-                        dataList.Add(autocall);
+                        dataList.Add(product);
                         dataList.Add(coupon);
+                        dataList.Add(price);
+                        dataList.Add(vol);
                         dataList.Add(strike_date);
                     }
                     else
@@ -205,5 +213,38 @@ namespace ToolBox
 
                 return dataList;
             }
+    
+        public static double Rate(double mat)
+        {
+            Dictionary<Double,Double> Rates = new Dictionary<double, double>
+            {
+                {1/52,0.03902},
+                {2/52,0.03903},
+                {1/12,0.03905},
+                {1/6,0.03893},
+                {1/4,0.0383},
+                {1/2,0.0368},
+                {3/4,0.03528},
+                {1.0,0.03394},
+                {1.5,0.03135},
+                {2.0,0.02961},
+                {3.0,0.02734},
+                {4.0,0.02603},
+                {5.0,0.02534},
+                {6.0,0.02496},
+                {7.0,0.02484},
+                {8.0,0.02485},
+                {9.0,0.02492},
+                {10.0,0.0251},
+                {12.0,0.02544},
+                {15.0,0.02588},
+                {20.0,0.02563},
+                {30.0,0.02402},
+            };
+            return 0.02;
+
+        }
     }
+
+
 }
