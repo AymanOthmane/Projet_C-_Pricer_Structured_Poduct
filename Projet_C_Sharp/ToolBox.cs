@@ -13,8 +13,6 @@ namespace ToolBox
             int nb_Simulations = 100000;
             double[][] ST = new double[nb_Simulations][];
             double[] Z = new double[nb_steps - 1];
-            // double[] Path = new double[nb_steps];
-            // Path[0] = S0;
             for (int i = 0; i<nb_Simulations;i++)
             {
                 double[] Path = new double[nb_steps];
@@ -55,6 +53,17 @@ namespace ToolBox
             return date;
         }
 
+        public DateTime GetEndBusinessDate(DateTime startDate, int years)
+        {
+            DateTime enddate;
+
+            enddate = GetEndDate(startDate,years);
+            enddate = GetNextBusinessDay(enddate);
+
+
+            return enddate;
+        }
+
         public static int GetNumberOfBusinessDays(DateTime startDate, DateTime endDate)
         {
             int count = 0;
@@ -93,44 +102,57 @@ namespace ToolBox
             return dt;
         }
 
+        public static List<DateTime> CalculationDate( DateTime startDate, bool frequency, int T)
+        {
+            List<DateTime> datesList = new List<DateTime>();
+            DateTime date = startDate;
+            int t = 1;
+
+            if (frequency)
+            {
+                while (t < T)
+                {
+                    date = date.AddYears(1);
+                    if (IsBusinessDay(date) == false)
+                    {
+                        date = GetNextBusinessDay(date);
+                    }
+                    datesList.Add(date);
+                    t++;
+                }
+            }
+            else
+            {
+                while (t < T)
+                {
+                    date = date.AddMonths(3);
+                    if (IsBusinessDay(date) == false)
+                    {
+                        date = GetNextBusinessDay(date);
+                    }
+                    datesList.Add(date);
+                    t++;
+                }
+            }
+
+            return datesList;
+        }
+
+        public static List<int> ReturnDateFromIndex(DateTime startDate, bool frequency, int T)
+        {
+            List<DateTime> datesList = CalculationDate( startDate,  frequency,  T);
+            List<int> indexList = new List<int>();
+            int dist;
+
+            foreach (DateTime date in datesList)
+            {
+                dist = GetNumberOfBusinessDays(startDate, date);
+                indexList.Add(dist);
+            }
+            return indexList;
+        }
+
+
+
     }
 }
-
-// class NormalDistributionGenerator
-// {
-//     private Random random;
-
-//     public NormalDistributionGenerator()
-//     {
-//         // Initialize the Random object
-//         random = new Random();
-//     }
-
-//     // Generate a single random sample from a normal distribution with mean mu and standard deviation sigma
-//     public double Generate(double mu, double sigma)
-//     {
-//         double u1 = 1.0 - random.NextDouble(); // Uniform random number between 0 and 1
-//         double u2 = 1.0 - random.NextDouble(); // Uniform random number between 0 and 1
-
-//         // Box-Muller transform to generate a normally distributed random number
-//         double z = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
-
-//         // Apply mean and standard deviation
-//         return mu + sigma * z;
-//     }
-// }
-
-// class Programs
-// {
-//     static void Main(string[] args)
-//     {
-//         // Example usage
-//         NormalDistributionGenerator generator = new NormalDistributionGenerator();
-//         double mu = 0; // Mean
-//         double sigma = 1; // Standard deviation
-
-//         // Generate a single random sample from the normal distribution
-//         double sample = generator.Generate(mu, sigma);
-//         Console.WriteLine("Generated sample: " + sample);
-//     }
-// }

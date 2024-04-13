@@ -10,20 +10,22 @@ namespace Autocall{
 
 
     public class Athena{
-        
-    private double S; // Current stock price
-    private double K; // Strike price
-    private double r; // Risk-free interest rate
-    private double barrier; //PDI Barrier
-    private double div; // Dividend yield
-    private double T; // Time to maturity (in years)
-    private double vol; // Volatility of the underlying asset
-    private double coupon; //Coupon of product
-    private double dt; //Time step
-    private bool frequency;
+
+        private DateTime startDate; // Start date
+        private double S; // Current stock price
+        private double K; // Strike price
+        private double r; // Risk-free interest rate
+        private double barrier; //PDI Barrier
+        private double div; // Dividend yield
+        private int T; // Time to maturity (in years)
+        private double vol; // Volatility of the underlying asset
+        private double coupon; //Coupon of product
+        private double dt; //Time step
+        private bool frequency;
     
-    public Athena(double S, double K, double r, double div, double T, double vol, double coupon, double dt, bool frequency)
+    public Athena(DateTime startDate, double S, double K, double r, double div, int T, double vol, double coupon, double dt, bool frequency)
     {
+        this.startDate = startDate;
         this.S = S;
         this.K = K;
         this.r = r;
@@ -39,7 +41,7 @@ namespace Autocall{
         {
 
             double[][] Paths = Generate_Paths.StockPaths(S, r, vol, dt, Convert.ToInt32(T/dt), 0, dt);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist)
-            double[][] Observations = ToolBox.ReturnDateFromIndex();
+            List<int> index = DateCalculator.ReturnDateFromIndex(startDate, frequency, T);
             double[] Payoff = new double[10000];
             double Price = 0;
             
@@ -87,21 +89,23 @@ namespace Autocall{
     }
 
     public class Phoenix{
-        
-    private double S; // Current stock price
-    private double K; // Strike price
-    private double r; // Risk-free interest rate
-    private double PDI_barrier; //PDI Barrier
-    private double Cpn_barrier; //Coupon Barrier
-    private double div; // Dividend yield
-    private double T; // Time to maturity (in years)
-    private double vol; // Volatility of the underlying asset
-    private double coupon; //Coupon of product
-    private double dt; //Time step
-    private bool frequency;
+
+        private DateTime startDate; // Start date
+        private double S; // Current stock price
+        private double K; // Strike price
+        private double r; // Risk-free interest rate
+        private double PDI_barrier; //PDI Barrier
+        private double Cpn_barrier; //Coupon Barrier
+        private double div; // Dividend yield
+        private int T; // Time to maturity (in years)
+        private double vol; // Volatility of the underlying asset
+        private double coupon; //Coupon of product
+        private double dt; //Time step
+        private bool frequency;
     
-    public Phoenix(double S, double K, double PDI_barrier, double Cpn_barrier, double r, double div, double T, double vol, double coupon, double dt, bool frequency)
+    public Phoenix(DateTime startDate, double S, double K, double PDI_barrier, double Cpn_barrier, double r, double div, int T, double vol, double coupon, double dt, bool frequency)
     {
+        this.startDate = startDate;
         this.S = S;
         this.K = K;
         this.PDI_barrier = PDI_barrier;
@@ -119,7 +123,7 @@ namespace Autocall{
         {
 
             double[][] Paths = Generate_Paths.StockPaths(S, r, vol, dt, Convert.ToInt32(T/dt), 0, dt);  //double S0, double r, double vol, double dt, int nb_Simulations, int nb_steps, double mean_dist, double stdev_dist)
-            double[][] Observations = ToolBox.ReturnDateFromIndex();
+            List<int> index = DateCalculator.ReturnDateFromIndex(startDate, frequency, T);
             double[] Payoff = new double[10000];
             double Price = 0;
             
