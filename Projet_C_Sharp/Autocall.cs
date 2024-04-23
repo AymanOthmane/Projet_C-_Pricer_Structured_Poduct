@@ -56,10 +56,10 @@ namespace Autocall{
             for (int i = 0; i < index.Count; i++)
             {
                 Observation= Observations[i];
-                // Console.WriteLine(Observation.Length);
+             
                 for (int j = 0; j < Observation.Length; j++)
                 {
-                    // Console.WriteLine(j);
+                    
                     if (Observation[j]<K)
                     {
                         Payoff[j]=0;
@@ -69,16 +69,15 @@ namespace Autocall{
                     };
                     
                 }
-                // Console.WriteLine(Payoff.Average());
+                
                 Price = Price + Math.Exp(-r) * Payoff.Average();
                 
             }
-            Console.WriteLine("Price: " + Price);
           
             Observation= Observations[Observations.Length-1];
             for (int j = 0; j < Observation.Length; j++)
             {
-                // Console.WriteLine(Observation[j]);
+                
                 if (Observation[j]<K && Observation[j]>barrier)
                 {
                     Payoff[j] = 1;

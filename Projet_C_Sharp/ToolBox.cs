@@ -176,8 +176,8 @@ namespace ToolBox
                         double mat = worksheet.Cells[7, 3].GetValue<double>();
                         string product = worksheet.Cells[8, 3].GetValue<string>();
                         double coupon = worksheet.Cells[9, 3].GetValue<double>();
-                        double price = worksheet.Cells[7, 9].GetValue<double>();
-                        double vol = worksheet.Cells[7, 10].GetValue<double>();
+                        double price = worksheet.Cells[5, 9].GetValue<double>();
+                        double vol = worksheet.Cells[5, 10].GetValue<double>();
                         DateTime strike_date = worksheet.Cells[10, 3].GetValue<DateTime>();
 
                         dataList.Add(N);
@@ -195,6 +195,8 @@ namespace ToolBox
                         dataList.Add(price);
                         dataList.Add(vol);
                         dataList.Add(strike_date);
+                     
+                        
                     }
                     else
                     {
@@ -215,9 +217,10 @@ namespace ToolBox
 
                 return dataList;
             }
-    
+  
         public static double Rate(double mat)
         {
+            
             Dictionary<Double,Double> Rates = new Dictionary<double, double>
             {
                 {1/52,0.03902},
@@ -243,7 +246,8 @@ namespace ToolBox
                 {20.0,0.02563},
                 {30.0,0.02402},
             };
-            return 0.02;
+            
+            return Rates[mat];
 
         }
     }
