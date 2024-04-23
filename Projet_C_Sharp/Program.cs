@@ -52,7 +52,7 @@ namespace Program{
             }
             
 
-            if (Convert.ToString(data[3]) == "PHOENIX")
+            if (Convert.ToString(data[3]) == "PHOENIX") //ooo
             {
                 Phoenix product = new Phoenix(dateStrike, dernierPrix, dernierPrix, 0.7, 0.8, 0.04, 0, maturite, vol30Jours, coupon, 0.00396825396825396825396825396825, frequenceAnnuelle);
                 double prix = product.Pricing();
